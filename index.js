@@ -76,8 +76,20 @@ const commons = {
 
         return config;
     }
-
-
+    , getConfiguration: (spec, config) => {
+        console.log("[getConfiguration|in] config:", config);
+        let r = {};
+        for (let key in spec) {
+            if (spec.hasOwnProperty(key)) {
+                if( config[key] )
+                    r[key] = config[key];
+                else if ( process.env[key] )
+                    r[key] = process.env[key];
+            }
+        }
+        console.log("[getConfiguration|out] =>", r);
+        return r;
+    }
 
 }
 

@@ -1,8 +1,7 @@
 @jtviegas/jscommons
 =========
 
-small javascript library comprising utility code 
-commonly used in other projects
+small javascript library comprising common utility code used in other projects
 
 ## Installation
 
