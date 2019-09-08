@@ -1,6 +1,6 @@
 {
   "name": "@jtviegas/jscommons",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "javascript utility code commonly used in other projects",
   "main": "index.js",
   "scripts": {
@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/jtviegas/jscommons/issues"
   },
-  "homepage": "https://github.com/jtviegas/jscommons#readme"
+  "homepage": "https://github.com/jtviegas/jscommons#readme",
+  "dependencies": {
+    "winston": "^3.2.1"
+  }
 }

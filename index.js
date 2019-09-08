@@ -1,5 +1,7 @@
 'use strict';
 
+const winston = require('winston');
+
 class ServerError extends Error {
     constructor(message, status) {
         super(message); // (1)
@@ -88,6 +90,19 @@ const commons = {
         });
         console.log("[getConfiguration|out] =>", r);
         return r;
+    }
+    , getDefaultWinstonConfig: () => {
+        return {
+                level: 'debug',
+                format: winston.format.combine(
+                    winston.format.splat(),
+                    winston.format.timestamp(),
+                    winston.format.printf(info => {
+                            return `${info.timestamp} ${info.level}: ${info.message}`;
+                        })
+                    ),
+                transports: [new winston.transports.Console()]
+        }
     }
 
 }
