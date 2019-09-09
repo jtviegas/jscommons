@@ -1,6 +1,6 @@
 {
   "name": "@jtviegas/jscommons",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "javascript utility code commonly used in other projects",
   "main": "index.js",
   "scripts": {

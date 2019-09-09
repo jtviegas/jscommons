@@ -78,7 +78,7 @@ const commons = {
 
         return config;
     }
-    , getConfiguration: (spec, config) => {
+    , getConfiguration: (spec, config, then) => {
         console.log("[getConfiguration|in] spec:", spec, "config:", config);
         let r = {};
         Object.keys(spec).forEach( internalVariable => {
@@ -87,9 +87,24 @@ const commons = {
                 r[internalVariable] = config[externalVariable];
             else if ( process.env[externalVariable] )
                 r[internalVariable] = process.env[externalVariable];
+
+            if( r[internalVariable] &&  (typeof then === "function") )
+                then(r, internalVariable);
+
         });
         console.log("[getConfiguration|out] =>", r);
         return r;
+    }
+    , handleListVariables: (variable, obj) => {
+        console.log("[handleListVariables|in] variable:", variable, "obj:", obj);
+
+        if( variable.endsWith("_LIST") ){
+            let val = obj[variable];
+            obj[variable] = val.split(',');
+        }
+
+        console.log("[handleListVariables|out] =>", obj);
+        return obj;
     }
     , getDefaultWinstonConfig: () => {
         return {
