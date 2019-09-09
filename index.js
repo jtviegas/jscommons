@@ -89,7 +89,7 @@ const commons = {
                 r[internalVariable] = process.env[externalVariable];
 
             if( r[internalVariable] &&  (typeof then === "function") )
-                then(r, internalVariable);
+                then(internalVariable, r);
 
         });
         console.log("[getConfiguration|out] =>", r);
