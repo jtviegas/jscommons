@@ -12,7 +12,21 @@ class ServerError extends Error {
 
 const commons = {
 
-    configByEnvironment: (config, variables, defaults, rangeSuffix, splitVariables) => {
+    getTableNameV1 : (tenant, entity, environment, entities, environments) => {
+
+        if( -1 === entities.indexOf(entity) )
+            throw new Error('table not enabled: ' + entity);
+
+        let result = `${tenant}_${entity}`;
+        if (null !== environment){
+            if( -1 === environments.indexOf(environment) )
+                throw new Error('environment not enabled: ' + environment);
+            result += '_' + environment;
+        }
+
+        return result;
+    }
+    , configByEnvironment: (config, variables, defaults, rangeSuffix, splitVariables) => {
 
         for(let i in variables){
 
