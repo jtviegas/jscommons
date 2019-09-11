@@ -1,7 +1,7 @@
 @jtviegas/jscommons
 =========
 
-small javascript library comprising utility code to be reused in other projects
+small javascript library comprising reusable utility code
 
 ## Installation
     npm install @jtviegas/jscommons

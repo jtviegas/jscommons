@@ -97,12 +97,14 @@ const commons = {
     }
     , handleListVariables: (variable, obj) => {
         console.log("[handleListVariables|in] variable:", variable, "obj:", obj);
-
         if( variable.endsWith("_LIST") ){
-            let val = obj[variable];
-            obj[variable] = val.split(',');
+            let idx = variable.lastIndexOf("_LIST");
+            let new_variable = variable.substring(0,idx);
+            if( !obj[new_variable] ){
+                let val = obj[variable];
+                obj[new_variable] = val.split(',');
+            }
         }
-
         console.log("[handleListVariables|out] =>", obj);
         return obj;
     }

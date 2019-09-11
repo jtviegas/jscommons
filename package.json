@@ -1,10 +1,11 @@
 {
   "name": "@jtviegas/jscommons",
-  "version": "0.0.12",
-  "description": "javascript utility code commonly used in other projects",
+  "version": "0.0.13",
+  "description": "small javascript library comprising reusable utility code",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- -R spec test/*",
+    "cover": "node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- -R spec test/*"
   },
   "engines": {
     "node": ">=4.2.4"
@@ -25,5 +26,11 @@
   "homepage": "https://github.com/jtviegas/jscommons#readme",
   "dependencies": {
     "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "coveralls": "^3.0.5",
+    "istanbul": "^0.4.5",
+    "mocha": "^6.1.4"
   }
 }
