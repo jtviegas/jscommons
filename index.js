@@ -135,6 +135,21 @@ const commons = {
                 transports: [new winston.transports.Console()]
         }
     }
+    , getEnvironmentConfiguration: (spec, then) => {
+        console.log("[getEnvironmentConfiguration|in] spec:", spec);
+        let r = {};
+        Object.keys(spec).forEach( internalVariable => {
+            let externalVariable = spec[internalVariable];
+            if ( process.env[externalVariable] )
+                r[internalVariable] = process.env[externalVariable];
+
+            if( r[internalVariable] &&  (typeof then === "function") )
+                then(internalVariable, r);
+
+        });
+        console.log("[getEnvironmentConfiguration|out] =>", r);
+        return r;
+    }
 
 }
 
