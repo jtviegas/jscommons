@@ -26,6 +26,17 @@ const commons = {
 
         return result;
     }
+    , getTableNameV2 : (appname, entity, environment, environments) => {
+
+        let result = `${appname}_${entity}`;
+        if (null !== environment){
+            if( -1 === environments.indexOf(environment) )
+                throw new Error('environment not enabled: ' + environment);
+            result += '_' + environment;
+        }
+
+        return result;
+    }
     , configByEnvironment: (config, variables, defaults, rangeSuffix, splitVariables) => {
 
         for(let i in variables){
@@ -97,8 +108,10 @@ const commons = {
         let r = {};
         Object.keys(spec).forEach( internalVariable => {
             let externalVariable = spec[internalVariable];
+            // if we have it in config then take it
             if( config[externalVariable] )
                 r[internalVariable] = config[externalVariable];
+            // if not in config check environment
             else if ( process.env[externalVariable] )
                 r[internalVariable] = process.env[externalVariable];
 
