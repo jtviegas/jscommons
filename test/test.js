@@ -64,6 +64,19 @@ describe('index tests', function() {
             done(null);
         });
 
+        it('should parse test variables correctly', function(done) {
+            let variable = 'STORELOADER_APP';
+            let new_variable = 'STORELOADER_APP';
+            let state = {};
+            state[variable] = 'test'
+
+            let configuration = commons.handleTestVariables(variable, state);
+            expect( configuration[variable] ).to.equal( state[variable] );
+            expect( configuration[new_variable] ).to.deep.equal( 'test'  );
+            done(null);
+        });
+
+
     });
 
 });

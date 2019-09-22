@@ -149,7 +149,7 @@ const commons = {
     , handleTestVariables: (variable, obj) => {
         console.log("[jscommons.handleTestVariables|in] variable:", variable, "obj:", obj);
         let idx = variable.lastIndexOf('_TEST');
-        if( variable.length > (idx+5) ) {
+        if( -1 < idx && variable.length > (idx+5) ) {
 
             let parent_variable = variable.substring(0, idx+5);
             if (!obj[parent_variable])
