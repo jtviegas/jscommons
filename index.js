@@ -107,7 +107,7 @@ const commons = {
         return config;
     }
     , getConfiguration: (spec, config, then) => {
-        console.log("[getConfiguration|in] spec:", spec, "config:", config);
+        console.log("[jscommons.getConfiguration|in] spec:", spec, "config:", config);
         let r = {};
         Object.keys(spec).forEach( internalVariable => {
             let externalVariable = spec[internalVariable];
@@ -122,11 +122,19 @@ const commons = {
                 then(internalVariable, r);
 
         });
-        console.log("[getConfiguration|out] =>", r);
+        console.log("[jscommons.getConfiguration|out] =>", r);
+        return r;
+    }
+    , mergeConfiguration: (config1, config2) => {
+        console.log("[jscommons.mergeConfiguration|in] :config1:", config1, "config2:", config2);
+        let r = {};
+        Object.keys(config1).forEach( key => r[key] = config1[key] );
+        Object.keys(config2).forEach( key => r[key] = config2[key] );
+        console.log("[jscommons.mergeConfiguration|out] =>", r);
         return r;
     }
     , handleListVariables: (variable, obj) => {
-        console.log("[handleListVariables|in] variable:", variable, "obj:", obj);
+        console.log("[jscommons.handleListVariables|in] variable:", variable, "obj:", obj);
         if( variable.endsWith("_LIST") ){
             let idx = variable.lastIndexOf("_LIST");
             let new_variable = variable.substring(0,idx);
@@ -135,7 +143,7 @@ const commons = {
                 obj[new_variable] = val.split(',');
             }
         }
-        console.log("[handleListVariables|out] =>", obj);
+        console.log("[jscommons.handleListVariables|out] =>", obj);
         return obj;
     }
     , getDefaultWinstonConfig: () => {
@@ -152,7 +160,7 @@ const commons = {
         }
     }
     , getEnvironmentConfiguration: (spec, then) => {
-        console.log("[getEnvironmentConfiguration|in] spec:", spec);
+        console.log("[jscommons.getEnvironmentConfiguration|in] spec:", spec);
         let r = {};
         Object.keys(spec).forEach( internalVariable => {
             let externalVariable = spec[internalVariable];
@@ -163,7 +171,7 @@ const commons = {
                 then(internalVariable, r);
 
         });
-        console.log("[getEnvironmentConfiguration|out] =>", r);
+        console.log("[jscommons.getEnvironmentConfiguration|out] =>", r);
         return r;
     }
 
