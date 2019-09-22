@@ -146,6 +146,23 @@ const commons = {
         console.log("[jscommons.handleListVariables|out] =>", obj);
         return obj;
     }
+    , handleTestVariables: (variable, obj) => {
+        console.log("[jscommons.handleTestVariables|in] variable:", variable, "obj:", obj);
+        let idx = variable.lastIndexOf('_TEST');
+        if( variable.length > (idx+5) ) {
+
+            let parent_variable = variable.substring(0, idx+5);
+            if (!obj[parent_variable])
+                obj[parent_variable] = {};
+
+            let new_variable = variable.substring(idx+6);
+            if (!obj[parent_variable][new_variable])
+                obj[parent_variable][new_variable] = obj[variable];
+
+        }
+        console.log("[jscommons.handleTestVariables|out] =>", obj);
+        return obj;
+    }
     , getDefaultWinstonConfig: () => {
         return {
                 level: 'debug',

@@ -50,4 +50,20 @@ describe('index tests', function() {
 
     });
 
+    describe('...test variables handling', function(done) {
+
+        it('should parse test variables correctly', function(done) {
+            let variable = 'OBJECTS_TEST_property';
+            let new_variable = 'OBJECTS_TEST';
+            let state = {};
+            state[variable] = 'xpto'
+
+            let configuration = commons.handleTestVariables(variable, state);
+            expect( configuration[variable] ).to.equal( state[variable] );
+            expect( configuration[new_variable] ).to.deep.equal( { property: 'xpto' } );
+            done(null);
+        });
+
+    });
+
 });
