@@ -41,7 +41,7 @@ const commons = {
         return `${appname}_${entity}_${environment}`;
     }
     , getTableNameV4 : (appname, entity, environment) => {
-        return `${appname}_${environment}_${entity}`;
+        return `${appname}-${environment}-${entity}`;
     }
     , configByEnvironment: (config, variables, defaults, rangeSuffix, splitVariables) => {
 

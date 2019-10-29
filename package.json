@@ -1,6 +1,6 @@
 {
   "name": "@jtviegas/jscommons",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "small javascript library comprising reusable utility code",
   "main": "index.js",
   "scripts": {
