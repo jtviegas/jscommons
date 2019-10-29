@@ -40,6 +40,9 @@ const commons = {
     , getTableNameV3 : (appname, entity, environment) => {
         return `${appname}_${entity}_${environment}`;
     }
+    , getTableNameV4 : (appname, entity, environment) => {
+        return `${appname}_${environment}_${entity}`;
+    }
     , configByEnvironment: (config, variables, defaults, rangeSuffix, splitVariables) => {
 
         for(let i in variables){
