@@ -76,6 +76,16 @@ describe('index tests', function() {
             done(null);
         });
 
+        it('should parse env variables correctly', function(done) {
+            process.env['avar'] = 'yes';
+
+            let r = commons.getEnvironmentVarsSubset(['avar','anotherone']);
+
+            expect( Object.keys(r).length ).to.equal( 1 );
+            expect( r['avar'] ).to.equal( 'yes' );
+            done(null);
+        });
+
 
     });
 

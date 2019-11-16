@@ -194,6 +194,18 @@ const commons = {
         console.log("[jscommons.getEnvironmentConfiguration|out] =>", r);
         return r;
     }
+    , getEnvironmentVarsSubset: (variables) => {
+        console.log("[jscommons.getEnvironmentVarsSubset|in] spec:", variables);
+        let r = {};
+        for(let i in variables) {
+            let variable = variables[i];
+            if (process.env[variable])
+                r[variable] = process.env[variable];
+        }
+        console.log("[jscommons.getEnvironmentVarsSubset|out] =>", r);
+        return r;
+    }
+
 
 }
 
