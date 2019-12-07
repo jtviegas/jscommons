@@ -205,7 +205,7 @@ const commons = {
         console.log("[jscommons.getEnvironmentVarsSubset|out] =>", r);
         return r;
     }
-
+    , setPosition: { 'first': 0, 'last': -1 }
 
 }
 
