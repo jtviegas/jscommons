@@ -25,4 +25,4 @@ jobs:
       if: ${{ ! startsWith(github.ref_name, 'release_') }}
       run: npm run-script publicate
       env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
