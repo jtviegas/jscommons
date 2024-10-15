@@ -1,4 +1,4 @@
-name: release build, test & publish
+name: cicd
 
 on: push
 
