@@ -1,14 +1,11 @@
 {
   "name": "@jtviegas/jscommons",
-  "version": "0.0.27",
+  "version": "0.0.28",
   "description": "small javascript library comprising reusable utility code",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- -R spec test/*",
-    "cover": "node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- -R spec test/*"
-  },
-  "engines": {
-    "node": ">=4.2.4"
+    "test": "./helper.sh test",
+    "publicate": "./helper.sh publish"
   },
   "repository": {
     "type": "git",
