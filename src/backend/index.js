@@ -1,17 +1,13 @@
-'use strict';
 
-const winston = require('winston');
-
-class ServerError extends Error {
-    constructor(message, status) {
-        super(message); // (1)
-        this.name = "ServerError"; // (2)
-        this.status = status;
-    }
-}
-
-const commons = {
-
+const backend = {
+    ServerError: class ServerError extends Error {
+        constructor(message, status) {
+            super(message); // (1)
+            this.name = "ServerError"; // (2)
+            this.status = status;
+        }
+    },
+    getHello: () => {console.log("HELLO")},
     getTableNameV1 : (tenant, entity, environment, entities, environments) => {
 
         if( -1 === entities.indexOf(entity) )
@@ -43,22 +39,22 @@ const commons = {
     , getTableNameV4 : (appname, entity, environment) => {
         return `${appname}-${environment}-${entity}`;
     }
-    , configByEnvironment: (config, variables, defaults, rangeSuffix, splitVariables) => {
+    , configByEnvironment: (config, variables, defaults, rangeSuffix, splitVariables, sysenv) => {
 
         for(let i in variables){
 
             let variable = variables[i];
             let defaultValue = defaults[i];
 
-            if ( process.env[variable] ){
+            if ( sysenv[variable] ){
 
                 let value = null;
                 if( splitVariables && 0 < splitVariables.length &&  -1 < splitVariables.indexOf(variable) ){
-                    let list = process.env[variable];
+                    let list = sysenv[variable];
                     value = list.split(',');
                 }
                 else
-                    value = process.env[variable];
+                    value = sysenv[variable];
 
                 let rangeVariable = variable + rangeSuffix;
                 if( config[rangeVariable] ){
@@ -109,7 +105,7 @@ const commons = {
 
         return config;
     }
-    , getConfiguration: (spec, config, then) => {
+    , getConfiguration: (spec, config, then, sysenv) => {
         console.log("[jscommons.getConfiguration|in] spec:", spec, "config:", config);
         let r = {};
         Object.keys(spec).forEach( internalVariable => {
@@ -118,8 +114,8 @@ const commons = {
             if( config[externalVariable] )
                 r[internalVariable] = config[externalVariable];
             // if not in config check environment
-            else if ( process.env[externalVariable] )
-                r[internalVariable] = process.env[externalVariable];
+            else if ( sysenv[externalVariable] )
+                r[internalVariable] = sysenv[externalVariable];
 
             if( r[internalVariable] &&  (typeof then === "function") )
                 then(internalVariable, r);
@@ -166,26 +162,26 @@ const commons = {
         console.log("[jscommons.handleTestVariables|out] =>", obj);
         return obj;
     }
-    , getDefaultWinstonConfig: () => {
-        return {
-                level: 'debug',
-                format: winston.format.combine(
-                    winston.format.splat(),
-                    winston.format.timestamp(),
-                    winston.format.printf(info => {
-                            return `${info.timestamp} ${info.level}: ${info.message}`;
-                        })
-                    ),
-                transports: [new winston.transports.Console()]
-        }
-    }
-    , getEnvironmentConfiguration: (spec, then) => {
+    // , getDefaultWinstonConfig: () => {
+    //     return {
+    //             level: 'debug',
+    //             format: winston.format.combine(
+    //                 winston.format.splat(),
+    //                 winston.format.timestamp(),
+    //                 winston.format.printf(info => {
+    //                         return `${info.timestamp} ${info.level}: ${info.message}`;
+    //                     })
+    //                 ),
+    //             transports: [new winston.transports.Console()]
+    //     }
+    // }
+    , getEnvironmentConfiguration: (spec, then, sysenv) => {
         console.log("[jscommons.getEnvironmentConfiguration|in] spec:", spec);
         let r = {};
         Object.keys(spec).forEach( internalVariable => {
             let externalVariable = spec[internalVariable];
-            if ( process.env[externalVariable] )
-                r[internalVariable] = process.env[externalVariable];
+            if ( sysenv[externalVariable] )
+                r[internalVariable] = sysenv[externalVariable];
 
             if( r[internalVariable] &&  (typeof then === "function") )
                 then(internalVariable, r);
@@ -194,13 +190,13 @@ const commons = {
         console.log("[jscommons.getEnvironmentConfiguration|out] =>", r);
         return r;
     }
-    , getEnvironmentVarsSubset: (variables) => {
+    , getEnvironmentVarsSubset: (variables, sysenv) => {
         console.log("[jscommons.getEnvironmentVarsSubset|in] spec:", variables);
         let r = {};
         for(let i in variables) {
             let variable = variables[i];
-            if (process.env[variable])
-                r[variable] = process.env[variable];
+            if (sysenv[variable])
+                r[variable] = sysenv[variable];
         }
         console.log("[jscommons.getEnvironmentVarsSubset|out] =>", r);
         return r;
@@ -210,6 +206,4 @@ const commons = {
 
 }
 
-module.exports = {};
-module.exports.commons = commons;
-module.exports.ServerError = ServerError;
+module.exports = backend;

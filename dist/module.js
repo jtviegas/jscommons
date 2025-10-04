@@ -1,0 +1,207 @@
+
+function $parcel$interopDefault(a) {
+  return a && a.__esModule ? a.default : a;
+}
+var $cf838c15c8b009ba$exports = {};
+var $499fdd07f0c0a2f3$exports = {};
+const $499fdd07f0c0a2f3$var$backend = {
+    ServerError: class ServerError extends Error {
+        constructor(message, status){
+            super(message); // (1)
+            this.name = "ServerError"; // (2)
+            this.status = status;
+        }
+    },
+    getHello: ()=>{
+        console.log("HELLO");
+    },
+    getTableNameV1: (tenant, entity, environment, entities, environments)=>{
+        if (-1 === entities.indexOf(entity)) throw new Error("table not enabled: " + entity);
+        let result = `${tenant}_${entity}`;
+        if (null !== environment) {
+            if (-1 === environments.indexOf(environment)) throw new Error("environment not enabled: " + environment);
+            result += "_" + environment;
+        }
+        return result;
+    },
+    getTableNameV2: (appname, entity, environment, environments)=>{
+        let result = `${appname}_${entity}`;
+        if (null !== environment) {
+            if (-1 === environments.indexOf(environment)) throw new Error("environment not enabled: " + environment);
+            result += "_" + environment;
+        }
+        return result;
+    },
+    getTableNameV3: (appname, entity, environment)=>{
+        return `${appname}_${entity}_${environment}`;
+    },
+    getTableNameV4: (appname, entity, environment)=>{
+        return `${appname}-${environment}-${entity}`;
+    },
+    configByEnvironment: (config, variables, defaults, rangeSuffix, splitVariables, sysenv)=>{
+        for(let i in variables){
+            let variable = variables[i];
+            let defaultValue = defaults[i];
+            if (sysenv[variable]) {
+                let value = null;
+                if (splitVariables && 0 < splitVariables.length && -1 < splitVariables.indexOf(variable)) {
+                    let list = sysenv[variable];
+                    value = list.split(",");
+                } else value = sysenv[variable];
+                let rangeVariable = variable + rangeSuffix;
+                if (config[rangeVariable]) {
+                    let range = config[rangeVariable];
+                    if (-1 === range.indexOf(value)) throw new Error("!!! variable: " + variable + " has an invalid value: " + value + " !!!");
+                }
+                config[variable] = value;
+            } else config[variable] = defaultValue;
+        }
+        return config;
+    },
+    configByDecoration: (config, variables, defaults, decoration, rangeSuffix, splitVariables)=>{
+        for(let i in variables){
+            let variable = variables[i];
+            let defaultValue = defaults[i];
+            if (decoration[variable]) {
+                let value = null;
+                if (splitVariables && 0 < splitVariables.length && -1 < splitVariables.indexOf(variable)) {
+                    let list = decoration[variable];
+                    value = list.split(",");
+                } else value = decoration[variable];
+                let rangeVariable = variable + rangeSuffix;
+                if (config[rangeVariable]) {
+                    let range = config[rangeVariable];
+                    if (-1 === range.indexOf(value)) throw new Error("!!! variable: " + variable + " has an invalid value: " + value + " !!!");
+                }
+                config[variable] = value;
+            } else config[variable] = defaultValue;
+        }
+        return config;
+    },
+    getConfiguration: (spec, config, then, sysenv)=>{
+        console.log("[jscommons.getConfiguration|in] spec:", spec, "config:", config);
+        let r = {};
+        Object.keys(spec).forEach((internalVariable)=>{
+            let externalVariable = spec[internalVariable];
+            // if we have it in config then take it
+            if (config[externalVariable]) r[internalVariable] = config[externalVariable];
+            else if (sysenv[externalVariable]) r[internalVariable] = sysenv[externalVariable];
+            if (r[internalVariable] && typeof then === "function") then(internalVariable, r);
+        });
+        console.log("[jscommons.getConfiguration|out] =>", r);
+        return r;
+    },
+    mergeConfiguration: (config1, config2)=>{
+        console.log("[jscommons.mergeConfiguration|in] :config1:", config1, "config2:", config2);
+        let r = {};
+        Object.keys(config1).forEach((key)=>r[key] = config1[key]);
+        Object.keys(config2).forEach((key)=>r[key] = config2[key]);
+        console.log("[jscommons.mergeConfiguration|out] =>", r);
+        return r;
+    },
+    handleListVariables: (variable, obj)=>{
+        console.log("[jscommons.handleListVariables|in] variable:", variable, "obj:", obj);
+        if (variable.endsWith("_LIST")) {
+            let idx = variable.lastIndexOf("_LIST");
+            let new_variable = variable.substring(0, idx);
+            if (!obj[new_variable]) {
+                let val = obj[variable];
+                obj[new_variable] = val.split(",");
+            }
+        }
+        console.log("[jscommons.handleListVariables|out] =>", obj);
+        return obj;
+    },
+    handleTestVariables: (variable, obj)=>{
+        console.log("[jscommons.handleTestVariables|in] variable:", variable, "obj:", obj);
+        let idx = variable.lastIndexOf("_TEST");
+        if (-1 < idx && variable.length > idx + 5) {
+            let parent_variable = variable.substring(0, idx + 5);
+            if (!obj[parent_variable]) obj[parent_variable] = {};
+            let new_variable = variable.substring(idx + 6);
+            if (!obj[parent_variable][new_variable]) obj[parent_variable][new_variable] = obj[variable];
+        }
+        console.log("[jscommons.handleTestVariables|out] =>", obj);
+        return obj;
+    },
+    getEnvironmentConfiguration: (spec, then, sysenv)=>{
+        console.log("[jscommons.getEnvironmentConfiguration|in] spec:", spec);
+        let r = {};
+        Object.keys(spec).forEach((internalVariable)=>{
+            let externalVariable = spec[internalVariable];
+            if (sysenv[externalVariable]) r[internalVariable] = sysenv[externalVariable];
+            if (r[internalVariable] && typeof then === "function") then(internalVariable, r);
+        });
+        console.log("[jscommons.getEnvironmentConfiguration|out] =>", r);
+        return r;
+    },
+    getEnvironmentVarsSubset: (variables, sysenv)=>{
+        console.log("[jscommons.getEnvironmentVarsSubset|in] spec:", variables);
+        let r = {};
+        for(let i in variables){
+            let variable = variables[i];
+            if (sysenv[variable]) r[variable] = sysenv[variable];
+        }
+        console.log("[jscommons.getEnvironmentVarsSubset|out] =>", r);
+        return r;
+    },
+    navigationPositionMap: {
+        "first": 0,
+        "last": -1
+    },
+    defaultPageSize: 12
+};
+$499fdd07f0c0a2f3$exports = $499fdd07f0c0a2f3$var$backend;
+
+
+var $5dc06d295ea28c1b$exports = {};
+const $5dc06d295ea28c1b$var$frontend = {
+    storageAvailable: (type)=>{
+        let storage;
+        try {
+            storage = window[type];
+            const x = "__storage_test__";
+            storage.setItem(x, x);
+            storage.removeItem(x);
+            return true;
+        } catch (e) {
+            return e instanceof DOMException && e.name === "QuotaExceededError" && // acknowledge QuotaExceededError only if there's something already stored
+            storage && storage.length !== 0;
+        }
+    },
+    setToLocalStorage: (key, value)=>{
+        console.log("[setToLocalStorage|in] (%o,%o)", key, value);
+        let result = null;
+        if (storageAvailable("localStorage")) {
+            localStorage.setItem(key, value);
+            result = value;
+        }
+        console.log("[setToLocalStorage|out] => %o", result);
+        return result;
+    },
+    getFromLocalStorage: (key)=>{
+        console.log("[getFromLocalStorage|in] (%o)", key);
+        let result = null;
+        if (storageAvailable("localStorage")) result = localStorage.getItem(key);
+        console.log("[getFromLocalStorage|out] => %o", result);
+        return result;
+    },
+    unsetFromLocalStorage: (key)=>{
+        console.log("[unsetFromLocalStorage|in] (%o)", key);
+        let result = null;
+        if (storageAvailable("localStorage")) result = localStorage.removeItem(key);
+        console.log("[unsetFromLocalStorage|out] => %o", result);
+        return result;
+    }
+};
+$5dc06d295ea28c1b$exports = $5dc06d295ea28c1b$var$frontend;
+
+
+$cf838c15c8b009ba$exports = {
+    backend: (0, (/*@__PURE__*/$parcel$interopDefault($499fdd07f0c0a2f3$exports))),
+    frontend: (0, (/*@__PURE__*/$parcel$interopDefault($5dc06d295ea28c1b$exports)))
+};
+
+
+export {$cf838c15c8b009ba$exports as default};
+//# sourceMappingURL=module.js.map

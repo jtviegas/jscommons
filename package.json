@@ -1,11 +1,16 @@
 {
   "name": "@jtviegas/jscommons",
-  "version": "0.0.29",
-  "description": "small javascript library comprising reusable utility code",
-  "main": "index.js",
+  "description": "library comprising reusable utility code, both for browser and for node server",
+  "version": "0.3.1",
+  "source": "src/index.js",
+  "main": "./dist/main.js",
+  "module": "./dist/module.js",
   "scripts": {
-    "test": "./helper.sh test",
-    "publicate": "./helper.sh publish"
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "build": "parcel build",
+    "watch": "parcel watch",
+    "release": "./helper.sh publish"
   },
   "repository": {
     "type": "git",
@@ -21,13 +26,9 @@
     "url": "https://github.com/jtviegas/jscommons/issues"
   },
   "homepage": "https://github.com/jtviegas/jscommons#readme",
-  "dependencies": {
-    "winston": "^3.2.1"
-  },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "coveralls": "^3.0.5",
-    "istanbul": "^0.4.5",
-    "mocha": "^6.1.4"
+    "jest": "^29.7.0",
+    "jest-cli": "^29.7.0",
+    "parcel": "^2.12.0"
   }
 }

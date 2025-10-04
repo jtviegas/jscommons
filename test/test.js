@@ -1,89 +1,75 @@
-'use strict';
+const commons = require('../src/backend/index');
 
-const commons = require('../index').commons;
-const chai = require('chai');
-const expect = chai.expect;
+describe('index tests', () => {
 
-describe('index tests', function() {
+    describe('...configuration',  () => {
 
-    describe('...configuration', function(done) {
-
-        it('should parse list variables correctly', function(done) {
+        it('should parse list variables correctly', () => {
             let variable = 'OBJECTS_LIST';
             let new_variable = 'OBJECTS';
             let state = {};
             state[variable] = 'a,b,c,d'
 
             let configuration = commons.handleListVariables(variable, state);
-            expect( configuration[variable] ).to.equal( state[variable] );
-            expect( configuration[new_variable] ).to.deep.equal(['a','b','c','d']);
-            done(null);
+            expect( configuration[variable] ).toEqual( state[variable] );
+            expect( configuration[new_variable] ).toEqual(['a','b','c','d']);
         });
 
     });
 
-    describe('...table name', function(done) {
+    describe('...table name', () => {
 
-        it('should provide table name correctly', function(done) {
+        it('should provide table name correctly', () => {
 
             let name = commons.getTableNameV1('xpto', 'item' ,'production', ['item', 'part'], ['production', 'development']);
-            expect( name ).to.equal( 'xpto_item_production' );
-
-            done(null);
+            expect( name ).toEqual( 'xpto_item_production' );
         });
 
-        it('should throw error on environment mismatch', function(done) {
+        it('should throw error on environment mismatch', () => {
 
             expect( commons.getTableNameV1.bind(commons, 'xpto', 'item' ,'production', ['item', 'part'], ['productionss', 'development']) )
-                .to.throw( 'environment not enabled: production' );
-
-            done(null);
+                .toThrow( 'environment not enabled: production' );
         });
 
-        it('should throw error on table mismatch', function(done) {
+        it('should throw error on table mismatch', () => {
 
             expect( commons.getTableNameV1.bind(commons, 'xpto', 'item' ,'production', ['itemss', 'part'], ['production', 'development']) )
-                .to.throw( 'table not enabled: item' );
-
-            done(null);
+                .toThrow( 'table not enabled: item' );
         });
 
     });
 
-    describe('...test variables handling', function(done) {
+    describe('...test variables handling', () => {
 
-        it('should parse test variables correctly', function(done) {
+        it('should parse test variables correctly', () => {
             let variable = 'OBJECTS_TEST_property';
             let new_variable = 'OBJECTS_TEST';
             let state = {};
             state[variable] = 'xpto'
 
             let configuration = commons.handleTestVariables(variable, state);
-            expect( configuration[variable] ).to.equal( state[variable] );
-            expect( configuration[new_variable] ).to.deep.equal( { property: 'xpto' } );
-            done(null);
+            expect( configuration[variable] ).toEqual( state[variable] );
+            expect( configuration[new_variable] ).toEqual( { property: 'xpto' } );
         });
 
-        it('should parse test variables correctly', function(done) {
+        it('should parse test variables correctly', () => {
             let variable = 'STORELOADER_APP';
             let new_variable = 'STORELOADER_APP';
             let state = {};
             state[variable] = 'test'
 
             let configuration = commons.handleTestVariables(variable, state);
-            expect( configuration[variable] ).to.equal( state[variable] );
-            expect( configuration[new_variable] ).to.deep.equal( 'test'  );
-            done(null);
+            expect( configuration[variable] ).toEqual( state[variable] );
+            expect( configuration[new_variable] ).toEqual( 'test'  );
         });
 
-        it('should parse env variables correctly', function(done) {
+        it('should parse env variables correctly', () => {
             process.env['avar'] = 'yes';
 
-            let r = commons.getEnvironmentVarsSubset(['avar','anotherone']);
+            let r = commons.getEnvironmentVarsSubset(['avar','anotherone'], process.env);
 
-            expect( Object.keys(r).length ).to.equal( 1 );
-            expect( r['avar'] ).to.equal( 'yes' );
-            done(null);
+            expect( Object.keys(r).length ).toEqual( 1 );
+            expect( r['avar'] ).toEqual( 'yes' );
         });
 
 

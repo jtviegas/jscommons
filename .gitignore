@@ -62,4 +62,7 @@ typings/
 .idea
 .secrets
 .local_variables
+.parcel-cache
+.vscode
+
 

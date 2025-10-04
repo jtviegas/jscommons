@@ -91,31 +91,6 @@ update_bashutils(){
 
 # ---------- LOCAL FUNCTIONS ----------
 
-npm_publish(){
-  info "[npm_publish] ..."
-  _pwd=`pwd`
-  cd "$this_folder"
-  npm config set "//${NPM_REGISTRY}/:_authToken" "${NPM_TOKEN}"
-  npm publish . --access="public"
-  if [ ! "$?" -eq "0" ]; then err "[npm_publish] could not publish" && cd "$_pwd" && return 1; fi
-  cd "$_pwd"
-  info "[npm_publish] ...done."
-}
-
-test(){
-  info "[test] ..."
-  _pwd=`pwd`
-  local __r=0
-  cd "$this_folder"
-  node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- -R spec test/*.js
-  __r=$?
-  if [ ! "$__r" -eq "0" ]; then err "[test] could not test and check coverage" ; fi
-
-  cd "$_pwd"
-  info "[test] ...done. ${__r}"
-  return $__r
-}
-
 usage() {
   cat <<EOM
   usage:
@@ -133,10 +108,7 @@ case "$1" in
     update_bashutils
     ;;
   publish)
-    npm_publish
-    ;;
-  test)
-    test
+    npm_publish "$NPM_REGISTRY" "$NPM_TOKEN" "$this_folder"
     ;;
   *)
     usage
